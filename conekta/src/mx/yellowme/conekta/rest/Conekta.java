@@ -38,52 +38,34 @@ public class Conekta {
         }        
     }
     
-    public static HttpResponseLite getChargesSync(){
+    public static HttpResponseLite getChargesSync(Context context){
         try {              
-            return ConektaRestClientSync.get("charges");
+            return ConektaRestClientSync.get(context, "charges");
         } catch (Exception ex) {
             Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
             return new HttpResponseLite(400, ex.getMessage(), null, null);
         }
     }
     
-    public static HttpResponseLite getEventsSync(){
+    public static HttpResponseLite getEventsSync(Context context){
         try {              
-            return ConektaRestClientSync.get("events");
+            return ConektaRestClientSync.get(context ,"events");
         } catch (Exception ex) {
             Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
             return new HttpResponseLite(400, ex.getMessage(), null, null);
         }
     }
     
-    public static HttpResponseLite chargeSync(Cargo cargo) {
+    public static HttpResponseLite chargeSync(Context context, Cargo cargo) {
         try {
             Gson gson = new Gson();                            
             String sgson = gson.toJson(cargo);            
-            return ConektaRestClientSync.post("charges",sgson);            
+            return ConektaRestClientSync.post(context ,"charges",sgson);            
         } catch (Exception ex) {
             Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
             return new HttpResponseLite(400, ex.getMessage(), null, null);
         }        
-    }
+    }        
     
-    
-//    new JsonHttpResponseHandler() {            
-//            @Override
-//            public void onSuccess(JSONArray jsona) {
-//            }                                  
-//            @Override
-//            public void onFailure(Throwable thrwbl, JSONArray jsona) {                
-//            }                
-//        });
-    //            ConektaRestClientAsync.post(context,"charges", entity, new JsonHttpResponseHandler() {                        
-//                @Override
-//                public void onSuccess(JSONObject jsono) {                
-//                    jr.setjSONObject(jsono);
-//                }                                              
-//                @Override
-//                public void onFailure(Throwable thrwbl, JSONObject jsono) { 
-//                }
-//            });
 }
 

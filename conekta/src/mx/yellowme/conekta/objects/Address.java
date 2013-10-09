@@ -18,6 +18,16 @@ public class Address {
     String country;
     String zip;   
 
+    public Address(String street1, String city, String state, String country, String zip) {
+        this.street1 = street1;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.zip = zip;
+    }
+    
+    
+
     public String getStreet1() {
         return street1;
     }

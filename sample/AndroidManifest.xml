@@ -3,8 +3,9 @@
       package="mx.yellowme.sample"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-permission android:name="android.permission.INTERNET" />        
+    <uses-permission android:name="android.permission.INTERNET" />            
     <application android:label="@string/app_name" >
+        <meta-data android:name="conektakey" android:value="key_EWkxLTVn4BWyRyoY" />
         <activity android:name="MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
