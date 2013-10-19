@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+    
+<!--    <EditText android:id="@+id/edit_message"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/card" />-->
+        
+    <Button android:id="@+id/button_simple_charge_async"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_charge_async"
+         />
+    
+    <Button android:id="@+id/button_simple_charge_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_charge_sync"
+         />
+</LinearLayout>
