@@ -10,7 +10,7 @@ import java.math.BigInteger;
  *
  * @author javier
  */
-public class ChargeCard extends Cargo{
+public class ChargeCard extends Charge{
     
     private Card card;    
 

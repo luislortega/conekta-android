@@ -3,10 +3,10 @@
         
     <string-array name="nav_options">
         <item>Conekta</item>
-        <item>Pago Simple</item>
-        <item>Pago Avanzado</item>
-        <item>Pago Oxxo</item>        
-        <item>Pago Tarjeta</item>
+        <item>Simple Charge</item>
+        <item>Advanced Charge</item>
+        <item>Oxxo Charge</item>        
+        <item>Bank Charge</item>
     </string-array>    
 
 </resources>

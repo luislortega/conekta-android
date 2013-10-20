@@ -6,6 +6,6 @@
     
     <string name="card">Tarjeta</string>
     
-    <string name="str_charge_async">Pagar Async</string>
-    <string name="str_charge_sync">Pagar Sync</string>
+    <string name="str_charge_async">Pay Async</string>
+    <string name="str_charge_sync">Pay Sync</string>
 </resources>

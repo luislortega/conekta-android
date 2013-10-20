@@ -17,9 +17,15 @@ public class Details {
     private String email;
     private String date_of_birth;
     private BillingAddress billing_address;
-    private List<LineItems> line_items;
+    private List<LineItem> line_items;
     private Shipment shipment;
 
+    public Details(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;        
+    }
+    
     public Details(String name, String phone, String email, String dateOfBirth) {
         this.name = name;
         this.phone = phone;
@@ -27,7 +33,7 @@ public class Details {
         this.date_of_birth = dateOfBirth;
     }
 
-    public Details(String name, String phone, String email, String dateOfBirth, BillingAddress billingAddress, List<LineItems> lineItemses, Shipment shipment) {
+    public Details(String name, String phone, String email, String dateOfBirth, BillingAddress billingAddress, List<LineItem> lineItemses, Shipment shipment) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -77,11 +83,11 @@ public class Details {
         this.billing_address = billingAddress;
     }
 
-    public List<LineItems> getLineItemses() {
+    public List<LineItem> getLineItemses() {
         return line_items;
     }
 
-    public void setLineItemses(List<LineItems> lineItemses) {
+    public void setLineItemses(List<LineItem> lineItemses) {
         this.line_items = lineItemses;
     }
 
@@ -95,8 +101,8 @@ public class Details {
 
     @Override
     public String toString() {
-        return "Details{" + "name=" + name + ", phone=" + phone + ", email=" + email + ", date_of_birth=" + date_of_birth + ", billingAddress=" + billing_address + ", lineItemses=" + line_items + ", shipment=" + shipment + '}';
-    }
+        return "Details{" + "name=" + name + ", phone=" + phone + ", email=" + email + ", date_of_birth=" + date_of_birth + ", billing_address=" + billing_address + ", line_items=" + line_items + ", shipment=" + shipment + '}';
+    }       
     
     
 }

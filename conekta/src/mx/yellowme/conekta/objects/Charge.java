@@ -10,18 +10,19 @@ import java.math.BigInteger;
  *
  * @author javier
  */
-public abstract class Cargo {
+public abstract class Charge {
     
     private String description;
     private BigInteger amount;
     private String currency;
     private String reference_id;
     private Details details;
+    private String session_id;
 
-    public Cargo() {
+    public Charge() {
     }
     
-    public Cargo(String description, BigInteger amount, String currency) {
+    public Charge(String description, BigInteger amount, String currency) {
         this.description = description;
         this.amount = amount;
         this.currency = currency;               
@@ -65,12 +66,20 @@ public abstract class Cargo {
 
     public void setDetails(Details details) {
         this.details = details;
+    }  
+
+    public String getSessionId() {
+        return session_id;
+    }
+
+    public void setSessionId(String session_id) {
+        this.session_id = session_id;
     }
 
     @Override
     public String toString() {
-        return "Cargo{" + "description=" + description + ", amount=" + amount + ", currency=" + currency + ", reference_id=" + reference_id + ", details=" + details + '}';
+        return "Charge{" + "description=" + description + ", amount=" + amount + ", currency=" + currency + ", reference_id=" + reference_id + ", details=" + details + ", session_id=" + session_id + '}';
     }
-               
+    
         
 }

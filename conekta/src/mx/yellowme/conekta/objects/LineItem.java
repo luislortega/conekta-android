@@ -10,7 +10,7 @@ import java.math.BigInteger;
  *
  * @author javier
  */
-public class LineItems {
+public class LineItem {
     
     private String name;
     private String description;
@@ -20,7 +20,7 @@ public class LineItems {
     private BigInteger quantity;
     private String type;
 
-    public LineItems(String name, String description, String sku, BigInteger unitPrice, BigInteger price, BigInteger quantity, String type) {
+    public LineItem(String name, String description, String sku, BigInteger unitPrice, BigInteger price, BigInteger quantity, String type) {
         this.name = name;
         this.description = description;
         this.sku = sku;

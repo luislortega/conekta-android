@@ -12,7 +12,7 @@ import com.threatmetrix.TrustDefenderMobile.TrustDefenderMobile;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mx.yellowme.conekta.objects.Cargo;
+import mx.yellowme.conekta.objects.Charge;
 import org.apache.http.entity.StringEntity;
 
 /**
@@ -20,14 +20,15 @@ import org.apache.http.entity.StringEntity;
  * @author javier
  */
 public class Conekta {
-    
-//    public static final int THM_OPTION_ALL_SYNC = THM_OPTION_ALL;
-//    public static final int THM_OPTION_ALL_ASYNC = 0xFF;
-//    public static final int THM_OPTION_MOST_SYNC = (THM_OPTION_ALL_SYNC ^THM_OPTION_TCP_TARPIT);
-//    public static final int THM_OPTION_MOST_ASYNC = (THM_OPTION_ALL_ASYNC ^THM_OPTION_TCP_TARPIT);
-//    public static final int THM_OPTION_LEAN_SYNC = (THM_OPTION_ALL_SYNC ^(THM_OPTION_TCP_FP | THM_OPTION_TCP_TARPIT));
-//    public static final int THM_OPTION_LEAN_ASYNC = (THM_OPTION_ALL_ASYNC ^(THM_OPTION_TCP_FP | THM_OPTION_TCP_TARPIT));
 
+    public static final String ORG_ID = "k8vif92e";
+    public static final String FTP_SERVER = "h.online-metrix.net";
+    public static final String URL_SERVER = "http://threatmetrix.com";
+    private static TrustDefenderMobile profile;
+
+    static {
+        profile = new TrustDefenderMobile();
+    }
 
     public static void getChargesAsync(JsonHttpResponseHandler handler) {
         ConektaRestClientAsync.get("charges", null, handler);
@@ -37,14 +38,27 @@ public class Conekta {
         ConektaRestClientAsync.get("events", null, handler);
     }
 
-    public static void chargeAsync(Context context, Cargo cargo, JsonHttpResponseHandler handler) {
+    public static void chargeAsync(final Context context, final Charge charge, final JsonHttpResponseHandler handler) {
         try {
-            Gson gson = new Gson();
-            String sgson = gson.toJson(cargo);
-            StringEntity entity = new StringEntity(sgson);
-            ConektaRestClientAsync.post(context, "charges", entity, handler);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
+            doProfileAsync(context, new ProfileNotify() {
+                @Override
+                public void complete() {
+                    try {
+                        switch (profile.getStatus()) {
+                            case THM_OK:
+                                charge.setSessionId(profile.getSessionID());
+                                Gson gson = new Gson();
+                                String sgson = gson.toJson(charge);
+                                StringEntity entity = new StringEntity(sgson);
+                                ConektaRestClientAsync.post(context, "charges", entity, handler);                                
+                        }                        
+                    } catch (UnsupportedEncodingException ex) {
+                        Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);                        
+                    }
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);            
         }
     }
 
@@ -66,37 +80,35 @@ public class Conekta {
         }
     }
 
-    public static HttpResponseLite chargeSync(Context context, Cargo cargo) {
+    public static HttpResponseLite chargeSync(Context context, Charge cargo) {
         try {
             Gson gson = new Gson();
+            String idSession = doProfile(context);
+            cargo.setSessionId(idSession);
             String sgson = gson.toJson(cargo);
-            return ConektaRestClientSync.post(context, "charges", sgson);
+            switch (profile.getStatus()) {
+                case THM_OK:
+                    return ConektaRestClientSync.post(context, "charges", sgson);                                        
+            }
+            return new HttpResponseLite(400, profile.getStatus().toString() , null, null);
         } catch (Exception ex) {
             Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
             return new HttpResponseLite(400, ex.getMessage(), null, null);
         }
     }
-    
-        //        org_id: k8vif92e
-        //        merchant: banorteixe_conekta
-    
 
-    public static void doProfileAsync(Context context) {
-        TrustDefenderMobile profile = new TrustDefenderMobile();
-        try {
-            profile.setTimeout(10);
-            profile.setCompletionNotifier(new ProfileNotify() {
-                @Override
-                public void complete() {
-                    String cadena;
-                    cadena="ok";
-//                    profile.setSessionID("");
-                }
-            });
-            int options = TrustDefenderMobile.THM_OPTION_ALL_ASYNC;
-            profile.doProfileRequest(context, "k8vif92e"  ,"", "", options);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private static void doProfileAsync(Context context, ProfileNotify profileNotify) throws InterruptedException {
+        profile.setTimeout(10);
+        profile.setCompletionNotifier(profileNotify);
+        int options = TrustDefenderMobile.THM_OPTION_ALL_ASYNC;
+        profile.doProfileRequest(context, ORG_ID, FTP_SERVER, URL_SERVER, options);
+    }
+
+    private static String doProfile(Context context) throws InterruptedException {
+        profile.setTimeout(10);
+        int options = TrustDefenderMobile.THM_OPTION_ALL_SYNC;
+        profile.setCompletionNotifier(null);
+        profile.doProfileRequest(context, ORG_ID, FTP_SERVER, URL_SERVER, options);
+        return profile.getSessionID();
     }
 }
