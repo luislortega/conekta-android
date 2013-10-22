@@ -41,6 +41,7 @@ public class ChargeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pd = new ProgressDialog(this.getActivity());
+        pd.setCancelable(false);
         pd.setMessage("Loading charge..");
         
         Button btnAsync = (Button) view.findViewById(R.id.button_simple_charge_async);

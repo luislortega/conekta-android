@@ -55,7 +55,8 @@ public class ChargeOxxoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         pd = new ProgressDialog(this.getActivity());
-        pd.setMessage("Loading Oxxo codebar..");
+        pd.setCancelable(false);
+        pd.setMessage("Loading Oxxo codebar..");        
 
         Button btnAsync = (Button) view.findViewById(R.id.button_oxxo_charge_async);
         Button btnSync = (Button) view.findViewById(R.id.button_oxxo_charge_sync);

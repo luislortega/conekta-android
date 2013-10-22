@@ -5,6 +5,8 @@
 package mx.yellowme.conekta.rest;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -25,16 +27,20 @@ public class ConektaRestClientAsync {
         asyncclient.addHeader("Content-type ", "application/json");        
     }                    
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        asyncclient.setBasicAuth("key_EWkxLTVn4BWyRyoY", "");
+    public static void get(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) throws PackageManager.NameNotFoundException {
+        asyncclient.setBasicAuth(getConektakey(context), "");
         asyncclient.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(Context context, String url,StringEntity entity, AsyncHttpResponseHandler responseHandler) {
-        asyncclient.setBasicAuth("key_EWkxLTVn4BWyRyoY", "");
+    public static void post(Context context, String url,StringEntity entity, AsyncHttpResponseHandler responseHandler) throws PackageManager.NameNotFoundException {
+        asyncclient.setBasicAuth(getConektakey(context), "");
         asyncclient.post(context,getAbsoluteUrl( url), entity, "application/json",responseHandler);
     }
 
+    private static String getConektakey(Context context) throws PackageManager.NameNotFoundException{
+        ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(),PackageManager.GET_META_DATA);       
+        return ai.metaData.getString("conektakey");
+    }
     private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }

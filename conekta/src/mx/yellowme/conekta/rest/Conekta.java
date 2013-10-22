@@ -5,6 +5,7 @@
 package mx.yellowme.conekta.rest;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.threatmetrix.TrustDefenderMobile.ProfileNotify;
@@ -30,12 +31,20 @@ public class Conekta {
         profile = new TrustDefenderMobile();
     }
 
-    public static void getChargesAsync(JsonHttpResponseHandler handler) {
-        ConektaRestClientAsync.get("charges", null, handler);
+    public static void getChargesAsync(final Context context, JsonHttpResponseHandler handler) {
+        try {
+            ConektaRestClientAsync.get(context, "charges", null, handler);
+        } catch (PackageManager.NameNotFoundException ex) {
+            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Dont have api key conekta", ex);
+        }
     }
 
-    public static void getEventsAsync(JsonHttpResponseHandler handler) {
-        ConektaRestClientAsync.get("events", null, handler);
+    public static void getEventsAsync(final Context context, JsonHttpResponseHandler handler) {
+        try {
+            ConektaRestClientAsync.get(context, "events", null, handler);
+        } catch (PackageManager.NameNotFoundException ex) {
+            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Dont have api key conekta", ex);
+        }
     }
 
     public static void chargeAsync(final Context context, final Charge charge, final JsonHttpResponseHandler handler) {
@@ -46,19 +55,26 @@ public class Conekta {
                     try {
                         switch (profile.getStatus()) {
                             case THM_OK:
-                                charge.setSessionId(profile.getSessionID());
+                                String sesString = profile.getSessionID();
+                                sesString = sesString.substring(18);
+                                charge.setSessionId(sesString);
                                 Gson gson = new Gson();
                                 String sgson = gson.toJson(charge);
                                 StringEntity entity = new StringEntity(sgson);
-                                ConektaRestClientAsync.post(context, "charges", entity, handler);                                
-                        }                        
+                                ConektaRestClientAsync.post(context, "charges", entity, handler);
+                                break;
+                            default:
+                                Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Time out exception in fingerprint");
+                        }
                     } catch (UnsupportedEncodingException ex) {
-                        Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);                        
+                        Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Bad format Json", ex);
+                    } catch (PackageManager.NameNotFoundException ex) {
+                        Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Dont have api key conekta", ex);
                     }
                 }
             });
         } catch (InterruptedException ex) {
-            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, "Time out exception in fingerprint", ex);
         }
     }
 
@@ -80,17 +96,19 @@ public class Conekta {
         }
     }
 
-    public static HttpResponseLite chargeSync(Context context, Charge cargo) {
+    public static HttpResponseLite chargeSync(Context context, Charge charge) {
         try {
             Gson gson = new Gson();
             String idSession = doProfile(context);
-            cargo.setSessionId(idSession);
-            String sgson = gson.toJson(cargo);
+            String sesString = profile.getSessionID();
+            sesString = sesString.substring(18);
+            charge.setSessionId(sesString);
+            String sgson = gson.toJson(charge);
             switch (profile.getStatus()) {
                 case THM_OK:
-                    return ConektaRestClientSync.post(context, "charges", sgson);                                        
+                    return ConektaRestClientSync.post(context, "charges", sgson);
             }
-            return new HttpResponseLite(400, profile.getStatus().toString() , null, null);
+            return new HttpResponseLite(400, profile.getStatus().toString(), null, null);
         } catch (Exception ex) {
             Logger.getLogger(Conekta.class.getName()).log(Level.SEVERE, null, ex);
             return new HttpResponseLite(400, ex.getMessage(), null, null);
@@ -101,6 +119,7 @@ public class Conekta {
         profile.setTimeout(10);
         profile.setCompletionNotifier(profileNotify);
         int options = TrustDefenderMobile.THM_OPTION_ALL_ASYNC;
+        profile.setSessionID(getSessionIdGeneric());
         profile.doProfileRequest(context, ORG_ID, FTP_SERVER, URL_SERVER, options);
     }
 
@@ -108,7 +127,17 @@ public class Conekta {
         profile.setTimeout(10);
         int options = TrustDefenderMobile.THM_OPTION_ALL_SYNC;
         profile.setCompletionNotifier(null);
+        profile.setSessionID(getSessionIdGeneric());
         profile.doProfileRequest(context, ORG_ID, FTP_SERVER, URL_SERVER, options);
         return profile.getSessionID();
+    }
+
+    private static String getSessionIdGeneric() {
+        String sessionId = "banorteixe_conekta";
+        String useable_characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        for(int x=0; x<30; x++){
+            sessionId +=useable_characters.charAt((int) Math.floor(Math.random() * 36 ));            
+        }
+        return  sessionId;
     }
 }
