@@ -7,9 +7,15 @@
 
 <ImageView android:layout_width="wrap_content"
         android:id="@+id/logo"
-        android:src="@drawable/logo"
+        android:src="@drawable/logoy"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside">
-</ImageView>
+        android:scaleType="centerInside" />
 
+
+<TextView android:id="@+id/txt_reference"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingTop="10dp"
+                  android:textColor="#fff"
+                  android:text="\@javikin" />
 </LinearLayout>

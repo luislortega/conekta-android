@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import mx.yellowme.sample.fragments.AboutFragment;
 import mx.yellowme.sample.fragments.ChargeBankFragment;
 import mx.yellowme.sample.fragments.ChargeCompleteFragment;
 import mx.yellowme.sample.fragments.ChargeFragment;
@@ -109,6 +110,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case 4:
                 fragment = new ChargeBankFragment();
+                break;
+            case 5:
+                fragment = new AboutFragment();
                 break;
             default:
                 fragment = new MainFragment();

@@ -1,0 +1,8 @@
+<resources>
+          
+       <style name="AppTheme" parent="android:Theme.Holo.Light" >                      
+           <item name="conekta_listPreferredItemHeightSmall">?android:attr/listPreferredItemHeightSmall</item>
+           <item name="conekta_textAppearanceListItemSmall">?android:attr/textAppearanceListItemSmall</item>           
+       </style>
+
+   </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<declare-styleable name="Theme">
+    <attr name="conekta_listPreferredItemHeightSmall" format="dimension" />    
+    <attr name="conekta_textAppearanceListItemSmall" format="reference" />
+</declare-styleable>
+</resources>
