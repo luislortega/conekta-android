@@ -24,7 +24,6 @@ import mx.yellowme.conekta.objects.Details;
 import mx.yellowme.conekta.objects.LineItem;
 import mx.yellowme.conekta.objects.Shipment;
 import mx.yellowme.conekta.rest.Conekta;
-import mx.yellowme.conekta.rest.HttpResponseLite;
 import mx.yellowme.sample.R;
 import mx.yellowme.sample.util.Messages;
 import org.json.JSONObject;
@@ -49,8 +48,7 @@ public class ChargeCompleteFragment extends Fragment {
         pd = new ProgressDialog(this.getActivity());
         pd.setMessage("Loading Charge..");
 
-        Button btnAsync = (Button) view.findViewById(R.id.button_charge_async);
-        Button btnSync = (Button) view.findViewById(R.id.button_charge_sync);
+        Button btnAsync = (Button) view.findViewById(R.id.button_charge_async);        
 
         Address address = new Address("250 Alexis St", "Red Deer", "Alberta", "Canada", "T4N 0B8");
         BigInteger numberCard = new BigInteger("4111111111111111");
@@ -74,7 +72,7 @@ public class ChargeCompleteFragment extends Fragment {
         btnAsync.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 pd.show();
-                Conekta.chargeAsync(ChargeCompleteFragment.this.getActivity(), chargeCard, new JsonHttpResponseHandler() {
+                Conekta.charge(ChargeCompleteFragment.this.getActivity(), chargeCard, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsono) {
                         pd.dismiss();
@@ -89,14 +87,6 @@ public class ChargeCompleteFragment extends Fragment {
                 });
             }
         });
-
-        btnSync.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                HttpResponseLite lite = Conekta.chargeSync(ChargeCompleteFragment.this.getActivity(), chargeCard);
-                Messages.displayAlert(ChargeCompleteFragment.this.getActivity(), "Response", lite.getResponse());
-            }
-        });
-
 
 
     }

@@ -30,7 +30,6 @@ import mx.yellowme.conekta.objects.Cash;
 import mx.yellowme.conekta.objects.ChargeCash;
 import mx.yellowme.conekta.objects.Details;
 import mx.yellowme.conekta.rest.Conekta;
-import mx.yellowme.conekta.rest.HttpResponseLite;
 import mx.yellowme.sample.R;
 import mx.yellowme.sample.util.Messages;
 import org.json.JSONException;
@@ -58,8 +57,7 @@ public class ChargeOxxoFragment extends Fragment {
         pd.setCancelable(false);
         pd.setMessage("Loading Oxxo codebar..");        
 
-        Button btnAsync = (Button) view.findViewById(R.id.button_oxxo_charge_async);
-        Button btnSync = (Button) view.findViewById(R.id.button_oxxo_charge_sync);
+        Button btnAsync = (Button) view.findViewById(R.id.button_oxxo_charge_async);        
         iv = (ImageView) view.findViewById(R.id.codeBarOxxo);
 
         BigInteger amount = new BigInteger("20000");
@@ -74,7 +72,7 @@ public class ChargeOxxoFragment extends Fragment {
             public void onClick(View view) {
                 iv.setImageBitmap(null);
                 pd.show();
-                Conekta.chargeAsync(ChargeOxxoFragment.this.getActivity(), cargoCash, new JsonHttpResponseHandler() {
+                Conekta.charge(ChargeOxxoFragment.this.getActivity(), cargoCash, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsono) {
                         try {
@@ -102,29 +100,6 @@ public class ChargeOxxoFragment extends Fragment {
                         Messages.displayAlert(ChargeOxxoFragment.this.getActivity(), "Error:", jsono.toString());
                     }
                 });
-            }
-        });
-
-        btnSync.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {                    
-                    iv.setImageBitmap(null);
-                    HttpResponseLite lite = Conekta.chargeSync(ChargeOxxoFragment.this.getActivity(), cargoCash);                    
-                    JSONObject jSonResult = new JSONObject(lite.getResponse());
-                    JSONObject payment = jSonResult.getJSONObject("payment_method");
-                    String barcode = payment.getString("barcode");
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = encodeAsBitmap(barcode, BarcodeFormat.CODE_128, 600, 300);
-                        iv.setImageBitmap(bitmap);                        
-                    } catch (WriterException ex) {                        
-                        Messages.displayAlert(ChargeOxxoFragment.this.getActivity(), "Error:", ex.getMessage());
-                        Logger.getLogger(ChargeOxxoFragment.class.getName()).log(Level.SEVERE, null, ex);
-                    }                    
-                } catch (JSONException ex) {                    
-                    Messages.displayAlert(ChargeOxxoFragment.this.getActivity(), "Error:", ex.getMessage());
-                    Logger.getLogger(ChargeOxxoFragment.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         });
 

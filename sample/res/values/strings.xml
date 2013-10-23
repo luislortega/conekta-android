@@ -3,6 +3,5 @@
     <string name="app_name">Conekta Sample</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="str_charge_async">Pay Async</string>
-    <string name="str_charge_sync">Pay Sync</string>
+    <string name="str_charge_async">Make charge</string>    
 </resources>

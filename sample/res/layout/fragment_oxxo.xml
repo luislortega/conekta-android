@@ -23,13 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"        
         android:text="@string/str_charge_async"
-         />
-    
-    <Button android:id="@+id/button_oxxo_charge_sync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/str_charge_sync"
-         />
+         />       
     
     </LinearLayout>
     

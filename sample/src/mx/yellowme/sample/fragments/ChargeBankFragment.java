@@ -22,7 +22,6 @@ import mx.yellowme.conekta.objects.Bank;
 import mx.yellowme.conekta.objects.ChargeBank;
 import mx.yellowme.conekta.objects.Details;
 import mx.yellowme.conekta.rest.Conekta;
-import mx.yellowme.conekta.rest.HttpResponseLite;
 import mx.yellowme.sample.R;
 import mx.yellowme.sample.util.Messages;
 import org.json.JSONException;
@@ -53,8 +52,7 @@ public class ChargeBankFragment extends Fragment {
         pd.setCancelable(false);
         pd.setMessage("Loading charge..");
 
-        Button btnAsync = (Button) view.findViewById(R.id.button_bank_charge_async);
-        Button btnSync = (Button) view.findViewById(R.id.button_bank_charge_sync);
+        Button btnAsync = (Button) view.findViewById(R.id.button_bank_charge_async);        
         txt_service_name = (TextView) view.findViewById(R.id.txt_service_name);
         txt_service_number = (TextView) view.findViewById(R.id.txt_service_number);
         txt_type = (TextView) view.findViewById(R.id.txt_type);
@@ -73,7 +71,7 @@ public class ChargeBankFragment extends Fragment {
             public void onClick(View view) {
                 clearValues();
                 pd.show();
-                Conekta.chargeAsync(ChargeBankFragment.this.getActivity(), chargeBank, new JsonHttpResponseHandler() {
+                Conekta.charge(ChargeBankFragment.this.getActivity(), chargeBank, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsono) {
                         try {
@@ -94,20 +92,7 @@ public class ChargeBankFragment extends Fragment {
                 });
             }
         });
-
-        btnSync.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    clearValues();
-                    HttpResponseLite lite = Conekta.chargeSync(ChargeBankFragment.this.getActivity(), chargeBank);                
-                        JSONObject jSonResult = new JSONObject(lite.getResponse());
-                        JSONObject payment = jSonResult.getJSONObject("payment_method");                       
-                        setValues(payment.getString("service_name"), payment.getString("service_number"),payment.getString("type"), payment.getString("reference"));
-                } catch (JSONException ex) {
-                    Logger.getLogger(ChargeBankFragment.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+        
 
     }
     
