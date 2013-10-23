@@ -44,8 +44,7 @@ public class ChargeFragment extends Fragment {
         pd.setCancelable(false);
         pd.setMessage("Loading charge..");
         
-        Button btnAsync = (Button) view.findViewById(R.id.button_simple_charge_async);
-        Button btnSync = (Button) view.findViewById(R.id.button_simple_charge_sync);
+        Button btnAsync = (Button) view.findViewById(R.id.button_simple_charge_async);        
 
         Address address = new Address("250 Alexis St", "Red Deer", "Alberta", "Canada", "T4N 0B8");
         BigInteger numberCard = new BigInteger("4111111111111111");
@@ -59,7 +58,7 @@ public class ChargeFragment extends Fragment {
         btnAsync.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 pd.show();
-                Conekta.chargeAsync(ChargeFragment.this.getActivity(), chargeCard, new JsonHttpResponseHandler() {
+                Conekta.charge(ChargeFragment.this.getActivity(), chargeCard, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsono) {
                         pd.dismiss();
@@ -73,16 +72,7 @@ public class ChargeFragment extends Fragment {
                 });                
             }
         });
-
-        btnSync.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                HttpResponseLite lite = Conekta.chargeSync(ChargeFragment.this.getActivity(), chargeCard);
-                Messages.displayAlert(ChargeFragment.this.getActivity(),"Response",lite.getResponse());                                
-            }
-        });
-
-
-
+      
     }
         
 }
